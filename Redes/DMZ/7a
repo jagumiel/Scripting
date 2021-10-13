@@ -1,0 +1,3 @@
+# Enmascarar direcciones INTERNET hacia la DMZ
+iptables -t nat -A PREROUTING -i $INTERNET_IFACE -p TCP -d $INTERNET_IFACE_IP --dport 80 -j DNAT --to-destination $DMZ_WEB_IP
+iptables -t nat -A PREROUTING -i $INTERNET_IFACE -p TCP -d $INTERNET_IFACE_IP --dport 443 -j DNAT --to-destination $DMZ_WEB_IP

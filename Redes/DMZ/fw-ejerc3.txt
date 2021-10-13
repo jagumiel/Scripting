@@ -1,0 +1,14 @@
+#
+iptables -A INPUT -i $LAN_IFACE -s $LAN_IP \
+                  -p icmp -m icmp --icmp-type echo-request \
+                  -m state --state NEW -j ACCEPT
+iptables -A OUTPUT -o $LAN_IFACE -d $LAN_IP \
+                  -p icmp -m icmp --icmp-type echo-reply \
+                  -m state --state RELATED,ESTABLISHED -j ACCEPT
+iptables -A INPUT -i $DMZ_IFACE -s $DMZ_IP \
+                  -p icmp -m icmp --icmp-type echo-request \
+                  -m state --state NEW -j ACCEPT
+iptables -A OUTPUT -o $DMZ_IFACE -d $DMZ_IP \
+                  -p icmp -m icmp --icmp-type echo-reply \
+                  -m state --state RELATED,ESTABLISHED -j ACCEPT
+#

@@ -1,0 +1,29 @@
+# Forwarding al servicio web en la DMZ
+iptables -t nat -A PREROUTING -i $INTERNET_IFACE \
+                -d $INTERNET_IFACE_IP -p tcp --dport 80 \
+                --sport 1024:65535 -j DNAT --to-destination $DMZ_WEB_IP:80
+iptables -t nat -A PREROUTING -i $INTERNET_IFACE \
+                -d $INTERNET_IFACE_IP -p tcp --dport 443 \
+                --sport 1024:65535 -j DNAT --to-destination $DMZ_WEB_IP:443
+#
+# Reglas auxiliares
+# Validar que en loopback solo llegan paquetes de las @IP's locales
+iptables -t nat -A PREROUTING -i $LO_IFACE -s $LO_IFACE_IP -j ACCEPT 
+iptables -t nat -A PREROUTING -i $LO_IFACE -s $LAN_IFACE_IP -j ACCEPT     
+iptables -t nat -A PREROUTING -i $LO_IFACE -s $DMZ_IFACE_IP -j ACCEPT              
+iptables -t nat -A PREROUTING -i $LO_IFACE -s $INTERNET_IFACE_IP -j ACCEPT 
+iptables -t nat -A POSTROUTING -s $LO_IFACE_IP -j ACCEPT
+iptables -t nat -A POSTROUTING -s $LAN_IFACE_IP -j ACCEPT
+iptables -t nat -A POSTROUTING -s $DMZ_IFACE_IP -j ACCEPT              
+iptables -t nat -A POSTROUTING -s $INTERNET_IFACE_IP -j ACCEPT 
+#
+# Validar que en las interfaces llegan paquetes de la red correspondiente
+iptables -t nat -A PREROUTING -i $LAN_IFACE -s $LAN_IP -j ACCEPT
+iptables -t nat -A PREROUTING -i $DMZ_IFACE -s $DMZ_IP -j ACCEPT
+iptables -t nat -A POSTROUTING -o $LAN_IFACE -d $LAN_IP -j ACCEPT
+iptables -t nat -A POSTROUTING -o $DMZ_IFACE -d $DMZ_IP -j ACCEPT
+#
+#
+## log all dropped packets in /var/log/messages
+iptables -t nat -A PREROUTING -j LOG --log-prefix "PREROUTING DROPPED:"
+iptables -t nat -A POSTROUTING -j LOG --log-prefix "POSTROUTING DROPPED:"

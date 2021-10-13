@@ -1,0 +1,27 @@
+#
+iptables -P INPUT DROP
+iptables -P OUTPUT DROP
+iptables -P FORWARD DROP
+#
+# Reglas auxiliares
+# desde la interface localhost a las @IP's locales            
+iptables -A INPUT -p ALL -i $LO_IFACE -s $LO_IFACE_IP -j ACCEPT
+iptables -A INPUT -p ALL -i $LO_IFACE -s $LAN_IFACE_IP -j ACCEPT
+iptables -A INPUT -p ALL -i $LO_IFACE -s $DMZ_IFACE_IP -j ACCEPT
+iptables -A INPUT -p ALL -i $LO_IFACE -s $INTERNET_IFACE_IP -j ACCEPT
+# Permitir salida solo por @IP's locales
+iptables -A OUTPUT -p ALL -s $LO_IFACE_IP -j ACCEPT
+iptables -A OUTPUT -p ALL -s $LAN_IFACE_IP -j ACCEPT
+iptables -A OUTPUT -p ALL -s $DMZ_IFACE_IP -j ACCEPT
+iptables -A OUTPUT -p ALL -s $INTERNET_IFACE_IP -j ACCEPT
+#
+####### INSERTAR AQUÍ fw-rules3.txt
+#
+####### INSERTAR AQUÍ fw-rules4.txt
+#
+## log all dropped packets in /var/log/messages
+iptables -A INPUT -j LOG --log-prefix "INPUT DROPPED:"
+iptables -A OUTPUT -j LOG --log-prefix "OUTPUT DROPPED:"
+iptables -A FORWARD -j LOG --log-prefix "FORWARD DROPPED:"
+#
+#

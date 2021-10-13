@@ -1,0 +1,8 @@
+# 
+iptables -A FORWARD -i $LAN_IFACE -s $LAN_IP \
+                    -o $DMZ_IFACE -d $DMZ_WEB_IP \
+                    -p tcp -m multiport --dport 80,443 -j ACCEPT
+iptables -A FORWARD -o $LAN_IFACE -d $LAN_IP \
+                    -i $DMZ_IFACE -s $DMZ_WEB_IP \
+                    -p tcp -m multiport --sport 80,443 -j ACCEPT
+#
