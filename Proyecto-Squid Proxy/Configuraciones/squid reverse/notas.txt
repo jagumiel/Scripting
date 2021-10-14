@@ -1,0 +1,29 @@
+
+# Squid normally listens to port 3128
+
+http_port 3128
+
+http_port 3128 accel defaultsite=192.168.110.40? Ip del pc
+
+cache_peer 127.0.0.1 parent 80 0 no-query originserver name=hp
+
+
+acl hp_users dstdomain ipdelequipo?
+
+#Default:
+
+http_access allow hp_users
+
+
+http_access deny all
+
+
+#Default:
+
+# none
+
+cache_peer 127.0.0.1 parent 80 0 no-query originserver name=hp
+
+cache_peer_access hp allow hp_users
+
+cache_peer_access hp deny all

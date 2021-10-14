@@ -1,0 +1,11 @@
+Cambios:
+
+cache_mem 64 MB
+Cantidad de memoria asignada al cache del proxy
+
+cache_dir ufs /var/spool/squid 400 16 256
+La cache está en ese directorio y tiene 400M para almacenar datos de webs.
+
+acl miRed src 192.168.110.0/24
+
+Creo una regla para permitir a los equipos de la red acceder al proxy.

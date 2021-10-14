@@ -1,0 +1,7 @@
+este proxy deniega el acceso a thepiratebay.se y a facebook.com
+
+Debería de funcionar, pero hay que asociar los equipos para que utilicen el proxy.
+
+He desactivado la cache con cache deny all
+
+y también he puesto como página por defecto egela.ehu.es, con acl egela dstdomain .egela.ehu.es
