@@ -21,13 +21,37 @@ En este apartado del repositorio los scripts están relacionados con la administ
 9.	Indica un método para poder ejecutar comandos en modo remoto mediante netcat.
 10.	Crea un script que monitorize el rango de puertos de 20 a 25 de todas las máquinas en la red 127.0.0.x.
 
-## Enunciados: Cortafuegos. Seguridad.
+## Enunciados y Soluciones: Cortafuegos. Seguridad.
 
 1.	Consultar la configuración actual del cortafuegos.
+    ```
+    iptables -L
+    ```
 2.	Utilizar iptables para conseguir la siguiente configuración:
     - Prohibir todo el tráfico por encima del puerto 8192, excepto el correspondiente al sistema local y el servicio webmin. Este último servicio sólo podrá ser accedido por el sistema local y por el sistema host (anfitrión de la máquina virtual VMWare).
+        ```
+        iptables -A INPUT -s localhost -p tcp --dport webmin -j ACCEPT      
+        iptables -A INPUT -p tcp --dport 8192:65535 -j DROP
+        ```
     - El servicio ftp sólo puede ser accedido por la máquina virtual y el host.
+        ```
+        ifconfig #En la consola. Para saber la dirección del host.
+        iptables -A INPUT -s HOST -p tcp --dport 21 -jaccept
+        ```
     - Los servicios SSH y web abiertos para todos.
+        ```
+        less /etc/services #En consola. Muestra los puertos que usan los servicios.
+        iptables -A INPUT -p tcp --dport ssh -j ACCEPT
+        iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+        ```
     - El resto de puertos abiertos para la red local pero no para Internet.
+        ```
+        iptables -A INPUT -p tcp --dport 1:65535 -s 192.168.0.0/24 -j ACCEPT
+        iptables -A INPUT -p tcp --dport 1:65535 -s 127.0.0.0/8 -j ACCEPT
+        iptables -A INPUT -p tcp --dport 1:65535 -j DROP
+        ```
 3.	Configurar el sistema para que la configuración del cortafuegos del apartado anterior tenga efecto en cuanto se inicie el sistema.
-
+    ```
+    Se crea un script con los comandos anteriores.
+    El script tiene que arrancarse en init.d. Se sigue el esquema del /etc/init.d/skeleton.
+    ```
