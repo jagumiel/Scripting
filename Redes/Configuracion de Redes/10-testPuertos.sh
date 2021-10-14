@@ -9,3 +9,5 @@ fi
 
 nmap 127.0.0.1 -p 20-25
 
+#Otra opción
+#netcat -zv localhost 20-25
