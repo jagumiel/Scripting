@@ -6,7 +6,7 @@ En una configuración DMZ, todo el tráfico entrante procedente de Internet se r
 
 En resumen, las redes DMZ se utilizan para proteger la red interna de una organización aislando los servicios públicos y aumentando la seguridad general.
 
-#Ejercicios
+# Ejercicios
 Se le proporciona un script de shell que configura un cortafuegos con tres interfaces (DMZ, LAN, INTERNET) y establece reglas utilizando iptables. El script define las direcciones IP e interfaces para cada red, así como reglas específicas para servicios como servidores web en la LAN y DMZ.
 
 Su tarea es añadir las siguientes reglas al script:
